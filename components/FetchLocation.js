@@ -7,8 +7,10 @@ const FetchLocation = ({ onGetLocation }) => {
 
     <View>
       <Button
+        style={styles.button}
         title="Get Location"
         onPress={onGetLocation}
+        color="black"
       />
     </View>
 
@@ -16,7 +18,11 @@ const FetchLocation = ({ onGetLocation }) => {
 };
 
 const styles = StyleSheet.create({
+  button: {
+    padding: 30,
+    backgroundColor: 'red',
 
+  }
 
 })
 

@@ -8,7 +8,7 @@ import FetchLocation from './components/FetchLocation'
 export default class App extends React.Component {
 
   handleGetUserLocation = () => {
-    console.log("sup");
+
   }
 
 
@@ -19,7 +19,7 @@ export default class App extends React.Component {
         <FetchLocation
           onGetLocation = {this.handleGetUserLocation}
           />
-        <Text>Open up App.js to start working on your app!</Text>
+        <Text>Location Location Location</Text>
       </View>
     );
   }
