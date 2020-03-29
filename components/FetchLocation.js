@@ -6,12 +6,14 @@ const FetchLocation = ({ onGetLocation }) => {
   return (
 
     <View>
+
       <Button
         style={styles.button}
         title="Get Location"
         onPress={onGetLocation}
         color="black"
       />
+
     </View>
 
   )
