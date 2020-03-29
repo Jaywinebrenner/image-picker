@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import FetchLocation from './components/FetchLocation';
 import ImagePickerExample from './components/ImagePickerExample'
@@ -9,18 +9,37 @@ import * as ImagePicker from 'expo-image-picker';
 
 
   export default function App() {
+
+    let [selectedImage, setSelectedImage] = React.useState(null);
+
     let openImagePickerAsync = async () => {
       let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
 
       if (permissionResult.granted === false) {
-        alert("Permission to access camera roll is required!");
+        alert('Permission to access camera roll is required!');
         return;
       }
 
       let pickerResult = await ImagePicker.launchImageLibraryAsync();
-      console.log(pickerResult);
+
+      if (pickerResult.cancelled === true) {
+        return;
+      }
+
+      setSelectedImage({ localUri: pickerResult.uri });
+    };
+
+    if (selectedImage !== null) {
+      return (
+        <View style={styles.importedImagecontainer}>
+          <Image
+            source={{ uri: selectedImage.localUri }}
+            style={styles.thumbnail}
+          />
+        </View>
+      );
     }
-  
+
 
 
 
@@ -76,6 +95,14 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 29,
     color: '#fff',
-
-  }
+  },
+  importedImagecontainer: {
+    alignItems: 'center',
+    
+  },
+  thumbnail: {
+  width: 300,
+  height: 300,
+  resizeMode: "contain"
+}
 });
