@@ -2,13 +2,28 @@ import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import FetchLocation from './components/FetchLocation';
 import ImagePickerExample from './components/ImagePickerExample'
-import logo from './assets/dracula.png'
+import logo from './assets/dracula.png';
+import * as ImagePicker from 'expo-image-picker';
 
 
-export default class App extends React.Component {
 
 
-  render() {
+  export default function App() {
+    let openImagePickerAsync = async () => {
+      let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+
+      if (permissionResult.granted === false) {
+        alert("Permission to access camera roll is required!");
+        return;
+      }
+
+      let pickerResult = await ImagePicker.launchImageLibraryAsync();
+      console.log(pickerResult);
+    }
+  
+
+
+
 
     return (
       <View style={styles.container}>
@@ -20,7 +35,7 @@ export default class App extends React.Component {
             style={styles.text}>To share a photo from your phone with a friend, just press the button below!
           </Text>
           <TouchableOpacity
-            onPress={() => alert("sup yall")}
+            onPress={openImagePickerAsync}
             style={styles.button}
             >
             <Text
@@ -33,7 +48,7 @@ export default class App extends React.Component {
       </View>
     );
   }
-}
+
 
 const styles = StyleSheet.create({
   container: {
