@@ -11,7 +11,10 @@ import uploadToAnonymousFilesAsync from 'anonymous-files';
   export default function App() {
 
     let [selectedImage, setSelectedImage] = React.useState(null);
+    let [showingPageOne, setShowingPageOne] = React.useState(true);
 
+console.log(selectedImage)
+console.log('hello')
       let openImagePickerAsync = async () => {
       let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
       if (permissionResult.granted === false) {
@@ -39,7 +42,17 @@ import uploadToAnonymousFilesAsync from 'anonymous-files';
   }
 
  Sharing.shareAsync(selectedImage.remoteUri || selectedImage.localUri);
+
 };
+
+
+let deleteSelectedPhoto = () => {
+  setSelectedImage({
+    selectedImage: null
+  })
+  return;
+  alert('This will be deleted')
+}
 
 
 
@@ -55,14 +68,14 @@ import uploadToAnonymousFilesAsync from 'anonymous-files';
           <TouchableOpacity onPress={openShareDialogAsync} style={styles.button}>
             <Text style={styles.buttonText}>Share this photo</Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={deleteSelectedPhoto} style={styles.button}>
+            <Text style={styles.buttonText}>Delete this photo</Text>
+          </TouchableOpacity>
         </View>
       );
     }
 
-
-
-
-
+if(selectedImage === null) {
     return (
       <View style={styles.container}>
         <Image
@@ -86,7 +99,7 @@ import uploadToAnonymousFilesAsync from 'anonymous-files';
       </View>
     );
   }
-
+}
 
 const styles = StyleSheet.create({
   container: {
