@@ -1,33 +1,48 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Platform, Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import FetchLocation from './components/FetchLocation';
 import ImagePickerExample from './components/ImagePickerExample'
 import logo from './assets/dracula.png';
 import * as ImagePicker from 'expo-image-picker';
-
-
+import * as Sharing from 'expo-sharing';
+import uploadToAnonymousFilesAsync from 'anonymous-files';
 
 
   export default function App() {
 
     let [selectedImage, setSelectedImage] = React.useState(null);
 
-    let openImagePickerAsync = async () => {
+      let openImagePickerAsync = async () => {
       let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
-
       if (permissionResult.granted === false) {
         alert('Permission to access camera roll is required!');
         return;
       }
-
       let pickerResult = await ImagePicker.launchImageLibraryAsync();
-
       if (pickerResult.cancelled === true) {
         return;
       }
 
-      setSelectedImage({ localUri: pickerResult.uri });
+
+      if (Platform.OS === 'web') {
+        let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
+        setSelectedImage({ localUri: pickerResult.uri, remoteUri });
+      } else {
+        setSelectedImage({ localUri: pickerResult.uri, remoteUri: null });
+      }
     };
+
+    let openShareDialogAsync = async () => {
+  if (!(await Sharing.isAvailableAsync())) {
+       alert(`The image is available for sharing at: ${selectedImage.remoteUri}`);
+    return;
+  }
+
+ Sharing.shareAsync(selectedImage.remoteUri || selectedImage.localUri);
+};
+
+
+
 
     if (selectedImage !== null) {
       return (
@@ -36,6 +51,10 @@ import * as ImagePicker from 'expo-image-picker';
             source={{ uri: selectedImage.localUri }}
             style={styles.thumbnail}
           />
+
+          <TouchableOpacity onPress={openShareDialogAsync} style={styles.button}>
+            <Text style={styles.buttonText}>Share this photo</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -98,7 +117,7 @@ const styles = StyleSheet.create({
   },
   importedImagecontainer: {
     alignItems: 'center',
-    
+
   },
   thumbnail: {
   width: 300,

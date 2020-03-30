@@ -15,7 +15,9 @@
     "splash": {
       "image": "./assets/dracula.png",
       "resizeMode": "contain",
-      "backgroundColor": "#d8e2f2"
+      "backgroundColor": "#d8e2f2",
+      "width": 100,
+      "height": 180
     },
     "updates": {
       "fallbackToCacheTimeout": 0
